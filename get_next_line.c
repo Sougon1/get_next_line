@@ -6,12 +6,13 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:06:16 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/10 17:22:53 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/13 11:32:26 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+
 /*
-static ssize_t	line()
+stati char	line()
 {
 	
 }
