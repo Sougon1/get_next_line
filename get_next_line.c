@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:06:16 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/13 11:32:26 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/13 15:38:48 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -34,7 +34,7 @@ char	*get_next_line(int fd)
 	remainder = NULL;
 	if (fd < 0)
 		return (NULL);
-	if (remainder != NULL || *remainder != '\0')
+	if (remainder != NULL && *remainder != '\0')
 	{
 		line = remainder;
 		remainder = NULL;
@@ -53,7 +53,7 @@ char	*get_next_line(int fd)
 	}
 	else
 	{
-		remainder= buffer + read_b;
+		remainder = buffer + read_b;
 	}
 	return (line);
 }

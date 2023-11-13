@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:32:27 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/13 11:30:59 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/13 15:46:33 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 256
+#  define BUFFER_SIZE 128
 #endif
 
 # include <unistd.h>

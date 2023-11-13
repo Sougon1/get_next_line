@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:34:30 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/13 11:22:41 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/13 15:27:20 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -23,4 +23,3 @@ char    *ft_strchr(const char *s, int c)
         return ((char *)s);
     return (NULL);
 }
-
