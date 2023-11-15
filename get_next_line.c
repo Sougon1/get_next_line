@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:06:16 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/15 12:29:00 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/15 16:17:34 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -32,7 +32,7 @@ char	*get_next_line(int fd)
 	ssize_t		read_b;
 	char		*newline;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 8192)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > 8192)
 		return (NULL);
 	if (remainder != NULL)
 	{
@@ -47,30 +47,25 @@ char	*get_next_line(int fd)
 	newline = ft_strchr(buffer, '\n');
 	if (newline)
 	{
-		*newline = '\0';
 		line = ft_strdup(buffer);
 		if (!line)
 			return (NULL);
-		if (*(newline + 1) != '\0')
+		free(remainder);
+		size_t	remlen = ft_strlen(newline +1);
+		remainder = (char *)malloc(sizeof(char) * (remlen +1));
+		if (!remainder)
 		{
-			free(remainder);
-			remainder = ft_strdup(newline + 1);
-			if (!remainder)
-			{
-				free(line);
-				return (NULL);
-			}
+			free(line);
+			return (NULL);
 		}
+		ft_strlcpy(remainder, newline +1, remlen +1);
+		*newline = '\0';
 	}
 	else
 	{
 		line = ft_strdup(buffer);
 		if (!line)
-		{
 			return (NULL);
-		}
-	//	free(remainder);
-	//	remainder = NULL;
 	}
 	return (line);
 }
