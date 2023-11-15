@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 12:06:16 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/14 15:46:15 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/15 10:57:15 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -23,6 +23,7 @@ static char	*remainder()
 }
 */
 
+
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
@@ -33,7 +34,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (remainder != NULL && *remainder != '\0')
+	if (remainder != NULL)
 	{
 		line = remainder;
 		remainder = NULL;
@@ -43,17 +44,18 @@ char	*get_next_line(int fd)
 	if (read_b <= 0)
 		return (NULL);
 	buffer[read_b] = '\0';
-//	line = buffer;
 	newline = ft_strchr(buffer, '\n');
 	if (newline != NULL)
 	{
-		*newline = '\0';
 		line = ft_strdup(buffer);
+		if (!line)
+			return (NULL);
+		*newline = '\0';
+		free(remainder);
 		remainder = ft_strdup(newline + 1);
-		if (!line || !remainder)
+		if (!remainder)
 		{
 			free(line);
-			free(remainder);
 			return (NULL);
 		}
 	}
