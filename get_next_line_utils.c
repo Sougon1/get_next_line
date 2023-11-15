@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:34:30 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/14 10:59:08 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/15 11:17:02 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -59,3 +59,37 @@ size_t	ft_strlen(const char *s)
 		len++;
 	return (len);
 }
+
+char    *ft_strjoin(char const *s1, char const *s2)
+{
+    char    *ptr;
+
+	if (s1 == NULL || s2 == NULL)
+       return (NULL);
+    ptr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+    if (!(ptr))
+       return (NULL);
+    ft_strlcpy(ptr, s1, ft_strlen(s1) + 1);
+    ft_strlcpy(ptr + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+    return (ptr);
+}
+
+size_t  ft_strlcpy(char *dst, const char *src, size_t size)
+{
+    size_t  v;
+
+	v = 0;
+    if (size == 0)
+        return (ft_strlen(src));
+    while (size - 1 > v && src[v] != 0)
+    {
+        dst[v] = src[v];
+        v++;
+    }
+    dst[v] = '\0';
+    v = 0;
+    while (src[v] != 0)
+        v++;
+    return (v);
+}
+

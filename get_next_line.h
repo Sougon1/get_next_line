@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:32:27 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/14 10:58:37 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/15 11:18:17 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strdup(const char *s);
 size_t	ft_strlen(const char *s);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif

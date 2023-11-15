@@ -1,6 +1,7 @@
-SRCS		= get_next_line.c \ get_next_line_utils.c
+SRCS		= get_next_line.c \
+			get_next_line_utils.c
 
-OBJ			= $(SRCS: .c=.o)
+OBJ			= $(SRCS:.c=.o)
 
 NAME 		= get.a
 
