@@ -6,7 +6,7 @@
 /*   By: ghumm <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:34:30 by ghumm             #+#    #+#             */
-/*   Updated: 2023/11/17 14:16:56 by ghumm            ###   ########.fr       */
+/*   Updated: 2023/11/20 12:38:41 by ghumm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -32,9 +32,10 @@ char	*ft_strdup(const char *s)
 	if (s == NULL)
 		return (NULL);
 	len = ft_strlen(s) + 1;
-	dup = (char *)malloc((len + 1) * sizeof(char));
-	if (dup != NULL)
-		ft_memcpy(dup, s, len);
+	dup = (char *)malloc(len);
+	if (!dup)
+		return (NULL);
+	ft_memcpy(dup, s, len);
 	return (dup);
 }
 
