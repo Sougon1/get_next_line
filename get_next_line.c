@@ -37,15 +37,6 @@ static char	*remainder()
 #include <stdlib.h>
 
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len] != '\0')
-		len++;
-	return (len);
-}
 char *ft_strdup(const char *s)
 {
     size_t len = 0;
@@ -129,101 +120,6 @@ char *ft_strchr(const char *s, int c)
     return (NULL);
 }
 
-/*
-char	*get_next_line(int fd)
-{
-	static char	buffer[BUFFER_SIZE + 1];
-	static char	*remainder;
-	char		*line;
-	int			read_b;
-	char		*temp;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	read_b = read(fd, buffer, BUFFER_SIZE);
-	while (read_b > 0 && !ft_strchr(buffer, '\n'))
-	{
-		buffer[read_b] = '\0';
-		temp = remainder;		
-		if (temp)
-			remainder = ft_strjoin(temp, buffer);
-		else
-			remainder = ft_strdup(buffer);
-		if (!remainder)
-		{
-			free(temp);
-			return (NULL);
-		}
-		free(temp);
-		read_b = read(fd, buffer, BUFFER_SIZE);
-	}
-	if (read_b <= 0 || (!ft_strchr(buffer, '\n') && (!remainder || remainder [0] == '\0')))
-	{
-		free(remainder);
-		return (NULL);
-	}
-	int len = 0;
-	while (remainder[len] != '\n' && remainder[len] != '\0')
-		len++;
-	line = ft_substr(remainder, 0, len);
-	if (!line)
-	{
-		free(remainder);
-		return (NULL);
-	}
-	if (remainder[len] == '\n')
-	{
-		temp = remainder;
-		remainder = ft_strdup(temp + len + 1);
-		free(temp);
-	}
-	else
-	{
-		free(remainder);
-		remainder = NULL;
-	}
-	return (line);
-}*/
-
-
-/*
-char	*get_next_line(int fd)
-{
-	static char	buffer[BUFFER_SIZE];
-	static char	*remainder = NULL;
-	char		*line = NULL;
-	char		*temp = NULL;
-	int			bytes_read;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0 && remainder && !ft_strchr(remainder, '\n'))
-	{
-		buffer[bytes_read] = '\0';
-		temp = remainder;
-		if (temp)
-			remainder = ft_strjoin(temp, buffer);
-		else
-			remainder = ft_strdup(buffer);
-		free(temp);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-	}
-	if (remainder == NULL || remainder[0] == '\0')
-	{
-		free(remainder);
-		return (NULL);
-	}
-	int len = 0;
-	while (remainder[len] != '\n' && remainder[len] != '\0')
-		len++;
-	line = ft_substr(remainder, 0, len);
-	temp = remainder;
-	remainder = (remainder[len] == '\n') ? ft_strdup(temp + len + 1) : NULL;
-	free(temp);
-
-	return (line);
-}*/
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -265,7 +161,7 @@ char	*get_next_line(int fd)
 	}
 
 	int len = 0;
-	while (/*remainder[len] != '\n' &&*/ remainder[len] != '\0')
+	while (remainder[len] != '\0')
 		len++;
 	
 	
@@ -293,100 +189,184 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
+///////////////////////////////////////////////////////
 /*
-char	*ft_get_line(char *save)
+size_t	ft_strlen(const char *s)
 {
-	int		i;
-	char	*s;
- 
+	int	i;
+
 	i = 0;
-	if (!save[i])
-		return (NULL);
-	while (save[i] && save[i] != '\n')
+	while (s[i])
 		i++;
-	s = (char *)malloc(sizeof(char) * (i + 2));
-	if (!s)
-		return (NULL);
-	i = 0;
-	while (save[i] && save[i] != '\n')
-	{
-		s[i] = save[i];
-		i++;
-	}
-	if (save[i] == '\n')
-	{
-		s[i] = save[i];
-		i++;
-	}
-	s[i] = '\0';
-	return (s);
+	return (i);
 }
- 
-char	*ft_save(char *save)
+
+char	*ft_strndup(const char *s1, int j)
 {
+	char	*pnt;
 	int		i;
-	int		c;
-	char	*s;
- 
+
+	pnt = malloc((ft_strlen(s1) + 1) * sizeof(char));
+	if (!pnt)
+		return (NULL);
 	i = 0;
-	while (save[i] && save[i] != '\n')
+	while (s1[i] && i < j)
+	{
+		pnt[i] = s1[i];
 		i++;
-	if (!save[i])
-	{
-		free(save);
-		return (NULL);
 	}
-	s = (char *)malloc(sizeof(char) * (ft_strlen(save) - i + 1));
-	if (!s)
-		return (NULL);
-	i++;
-	c = 0;
-	while (save[i])
-		s[c++] = save[i++];
-	s[c] = '\0';
-	free(save);
-	return (s);
+	pnt[i] = '\0';
+	return (pnt);
 }
- 
-char	*ft_read_and_save(int fd, char *save)
+void	ft_bzero(void *s, size_t n)
 {
-	char	*buff;
-	int		read_bytes;
- 
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
-		return (NULL);
-	read_bytes = 1;
-	while (!ft_strchr(save, '\n') && read_bytes != 0)
+	int	i;
+
+	i = 0;
+	while (i < (int)n)
 	{
-		read_bytes = read(fd, buff, BUFFER_SIZE);
-		if (read_bytes == -1)
+		((char *) s)[i] = 0;
+		i++;
+	}
+}
+char	*ft_strnjoin(char const *s1, char const *s2, int i)
+{
+	int		s1_len;
+	int		s3_len;
+	char	*s3;
+	int		k;
+	int		j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s3_len = ft_strlen(s1) + i;
+	s3 = malloc((s3_len + 1) * sizeof(char));
+	if (!s3)
+		return (NULL);
+	ft_bzero(s3, s3_len + 1);
+	k = 0;
+	j = 0;
+	while (k < s3_len)
+	{
+		if (k < s1_len)
+			s3[k] = s1[k];
+		else
+			s3[k] = s2[j++];
+		k++;
+	}
+	return (s3);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dsts)
+{
+	size_t	i;
+
+	if (!dsts)
+		return (ft_strlen(src));
+	i = 0;
+	while (src[i] && i < dsts - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+
+//////////////////////////////////////////
+
+int	ft_strchr_i(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != (unsigned char)c)
+		i++;
+	if (s[i] == (unsigned char)c)
+		return (i);
+	return (-1);
+}
+
+
+int	analyse_buffer(char *buffer, char **line)
+{
+	char	*s1;
+	int	i;
+	int	j;
+	
+	i = ft_strchr_i(buffer, '\n');
+	if (i != -1)
+	{
+		j = ft_strchr_i(&buffer[i + 1], '\n');
+		free(*line);
+		if (j != -1)
 		{
-			free(buff);
-			return (NULL);
+			*line = ft_strndup(&buffer[i + 1], j + 1);
+			s1 = ft_strndup(&buffer[i + 1], BUFFER_SIZE);
+			ft_strlcpy(buffer, s1, BUFFER_SIZE);
+			free(s1);
+			return (1);
 		}
-		buff[read_bytes] = '\0';
-		save = ft_strjoin(save, buff);
+		else
+			*line = ft_strndup(&buffer[i + 1], BUFFER_SIZE);
 	}
-	free(buff);
-	return (save);
+	return (-1);
 }
- 
+
+
+void	analyse_fd(char *buffer, char **line, int  fd)
+{
+	char	*s1;
+	int	read_size;
+
+	read_size = 1;
+	while (read_size > 0)
+	{
+		ft_bzero(buffer, BUFFER_SIZE);
+		read_size = read(fd, buffer, BUFFER_SIZE);
+		if (ft_strchr_i(buffer, '\n') == -1 && read_size != 0)
+		{
+			s1 = ft_strndup(*line, ft_strlen(*line));
+			free(*line);
+			*line = ft_strnjoin(s1, buffer, BUFFER_SIZE);
+			free(s1);
+		}
+		else
+		{
+			s1 = ft_strndup(*line, ft_strlen(*line));
+			free(*line);
+			*line = ft_strnjoin(s1, buffer, ft_strchr_i(buffer, '\n') + 1);
+			free(s1);
+			break ;
+		}
+	}
+}
+
 char	*get_next_line(int fd)
 {
+	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
-	static char	*save;
- 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	save = ft_read_and_save(fd, save);
-	if (!save)
+
+	if (read(fd, buffer, 0) < 0)
 		return (NULL);
-	line = ft_get_line(save);
-	save = ft_save(save);
+	line = malloc(1 * sizeof(char));
+	if (!line)
+		return (NULL);
+	ft_bzero(line, 1);
+	if (analyse_buffer((char *)&buffer, &line) == -1)
+		analyse_fd((char *)&buffer, &line, fd);
+	if (line[0] == 0 && ft_strlen(line) == 0)
+	{
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
 */
+/////////////////////////////////////////////////////////////
+
 
 /*
 void print_test_result(int test_number, const char *result, const char *expected)
