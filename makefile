@@ -13,9 +13,6 @@ all: ${NAME}
 ${NAME}: ${OBJ}
 		ar crs $@ $^
 
-%.o: %.c
-		${CC} ${CFLAGS} -c $< -o $@
-
 clean:
 		rm -rf ${OBJ}
 	
