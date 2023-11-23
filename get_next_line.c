@@ -173,8 +173,8 @@ char	*get_next_line(int fd)
 	return (line);
 }*/
 
+
 #define BUFFER_SIZE 42
-#define MAX_LINE_SIZE 1024
 
 char *get_next_line(int fd)
 {
@@ -184,32 +184,48 @@ char *get_next_line(int fd)
 
     if (BUFFER_SIZE < 1 || fd < 0)
         return (NULL);
+    
     i = 0;
-    str_buffer = (char *)malloc(BUFFER_SIZE + 1);
+    str_buffer = (char *)malloc(100000000);
+    
     if (!str_buffer)
         return (NULL);
-    byte = read(fd, str_buffer + i, BUFFER_SIZE);
+    
+    byte = read(fd, str_buffer, BUFFER_SIZE);
+    
     while (byte > 0)
     {
-    	i += byte;
-        if(str_buffer[i - 1] == '\n')
-            break ;
-	if (i == MAX_LINE_SIZE)
-	{
-		free(str_buffer);
-		return (NULL);
-	}
+        i += byte;
+
+        // Recherche du caractère '\n' dans la partie du tampon qui vient d'être lue
+        int j = 0;
+        while (j < byte)
+        {
+            if (str_buffer[j] == '\n')
+            {
+                break;
+            }
+            j++;
+        }
+
+        if (j < byte) // '\n' trouvé
+            break;
+	j = 0;
         byte = read(fd, str_buffer + i, BUFFER_SIZE);
     }
-    // no more char OR error happens
+
+    // Plus de caractères ou une erreur s'est produite
     if (i == 0 || byte < 0)
     {
         free(str_buffer);
         return (NULL);
     }
+
     str_buffer[i] = '\0';
+
     return (str_buffer);
 }
+
 
 
 
@@ -247,8 +263,8 @@ char *get_next_line(int fd)
     }
     str_buffer[i] = '\0';
     return (str_buffer);
-}
-*/
+}*/
+
 
 
 
@@ -265,11 +281,11 @@ int main(void)
     path = "text2.txt";
     fd = open(path, O_RDONLY);
     i = 0;
-    while(i < 10) // number of loop (test)
+    while(i < 7) // number of loop (test)
     {
         str = get_next_line(fd);
-        printf("i: %i\n", i);
-        printf("fd: %i, %s\n", fd, str);
+        printf("i%i\n", i);
+        printf("fd: %s\n", str);
         i++;
     }
     return (0);
