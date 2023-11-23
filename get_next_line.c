@@ -17,24 +17,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-/*
-stati char	line()
-{
-	
-}
-
-static char	*remainder()
-{
-	
-}
-*/
 
 
-
-
-
-#include <unistd.h>
-#include <stdlib.h>
 
 
 char *ft_strdup(const char *s)
@@ -125,7 +109,7 @@ char *ft_strchr(const char *s, int c)
 #include <unistd.h>
 
 //#define BUFFER_SIZE 42
-
+/*
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
@@ -187,234 +171,107 @@ char	*get_next_line(int fd)
 
 
 	return (line);
+}*/
+
+#define BUFFER_SIZE 42
+#define MAX_LINE_SIZE 1024
+
+char *get_next_line(int fd)
+{
+    int     byte;
+    char    *str_buffer;
+    int     i;
+
+    if (BUFFER_SIZE < 1 || fd < 0)
+        return (NULL);
+    i = 0;
+    str_buffer = (char *)malloc(BUFFER_SIZE + 1);
+    if (!str_buffer)
+        return (NULL);
+    byte = read(fd, str_buffer + i, BUFFER_SIZE);
+    while (byte > 0)
+    {
+    	i += byte;
+        if(str_buffer[i - 1] == '\n')
+            break ;
+	if (i == MAX_LINE_SIZE)
+	{
+		free(str_buffer);
+		return (NULL);
+	}
+        byte = read(fd, str_buffer + i, BUFFER_SIZE);
+    }
+    // no more char OR error happens
+    if (i == 0 || byte < 0)
+    {
+        free(str_buffer);
+        return (NULL);
+    }
+    str_buffer[i] = '\0';
+    return (str_buffer);
 }
 
-///////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////
+//////////////FONCTIONEL
+/////
 /*
-size_t	ft_strlen(const char *s)
+char *get_next_line(int fd)
 {
-	int	i;
+    int     byte;
+    char    c;
+    char    *str_buffer;
+    int     i;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strndup(const char *s1, int j)
-{
-	char	*pnt;
-	int		i;
-
-	pnt = malloc((ft_strlen(s1) + 1) * sizeof(char));
-	if (!pnt)
-		return (NULL);
-	i = 0;
-	while (s1[i] && i < j)
-	{
-		pnt[i] = s1[i];
-		i++;
-	}
-	pnt[i] = '\0';
-	return (pnt);
-}
-void	ft_bzero(void *s, size_t n)
-{
-	int	i;
-
-	i = 0;
-	while (i < (int)n)
-	{
-		((char *) s)[i] = 0;
-		i++;
-	}
-}
-char	*ft_strnjoin(char const *s1, char const *s2, int i)
-{
-	int		s1_len;
-	int		s3_len;
-	char	*s3;
-	int		k;
-	int		j;
-
-	if (!s1 || !s2)
-		return (NULL);
-	s1_len = ft_strlen(s1);
-	s3_len = ft_strlen(s1) + i;
-	s3 = malloc((s3_len + 1) * sizeof(char));
-	if (!s3)
-		return (NULL);
-	ft_bzero(s3, s3_len + 1);
-	k = 0;
-	j = 0;
-	while (k < s3_len)
-	{
-		if (k < s1_len)
-			s3[k] = s1[k];
-		else
-			s3[k] = s2[j++];
-		k++;
-	}
-	return (s3);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dsts)
-{
-	size_t	i;
-
-	if (!dsts)
-		return (ft_strlen(src));
-	i = 0;
-	while (src[i] && i < dsts - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
-}
-
-
-//////////////////////////////////////////
-
-int	ft_strchr_i(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != (unsigned char)c)
-		i++;
-	if (s[i] == (unsigned char)c)
-		return (i);
-	return (-1);
-}
-
-
-int	analyse_buffer(char *buffer, char **line)
-{
-	char	*s1;
-	int	i;
-	int	j;
-	
-	i = ft_strchr_i(buffer, '\n');
-	if (i != -1)
-	{
-		j = ft_strchr_i(&buffer[i + 1], '\n');
-		free(*line);
-		if (j != -1)
-		{
-			*line = ft_strndup(&buffer[i + 1], j + 1);
-			s1 = ft_strndup(&buffer[i + 1], BUFFER_SIZE);
-			ft_strlcpy(buffer, s1, BUFFER_SIZE);
-			free(s1);
-			return (1);
-		}
-		else
-			*line = ft_strndup(&buffer[i + 1], BUFFER_SIZE);
-	}
-	return (-1);
-}
-
-
-void	analyse_fd(char *buffer, char **line, int  fd)
-{
-	char	*s1;
-	int	read_size;
-
-	read_size = 1;
-	while (read_size > 0)
-	{
-		ft_bzero(buffer, BUFFER_SIZE);
-		read_size = read(fd, buffer, BUFFER_SIZE);
-		if (ft_strchr_i(buffer, '\n') == -1 && read_size != 0)
-		{
-			s1 = ft_strndup(*line, ft_strlen(*line));
-			free(*line);
-			*line = ft_strnjoin(s1, buffer, BUFFER_SIZE);
-			free(s1);
-		}
-		else
-		{
-			s1 = ft_strndup(*line, ft_strlen(*line));
-			free(*line);
-			*line = ft_strnjoin(s1, buffer, ft_strchr_i(buffer, '\n') + 1);
-			free(s1);
-			break ;
-		}
-	}
-}
-
-char	*get_next_line(int fd)
-{
-	static char	buffer[BUFFER_SIZE + 1];
-	char		*line;
-
-	if (read(fd, buffer, 0) < 0)
-		return (NULL);
-	line = malloc(1 * sizeof(char));
-	if (!line)
-		return (NULL);
-	ft_bzero(line, 1);
-	if (analyse_buffer((char *)&buffer, &line) == -1)
-		analyse_fd((char *)&buffer, &line, fd);
-	if (line[0] == 0 && ft_strlen(line) == 0)
-	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
+    if (BUFFER_SIZE < 1 || fd < 0)
+        return (NULL);
+    i = 0;
+    str_buffer = (char *)malloc(10000000);
+    if (!str_buffer)
+        return (NULL);
+    byte = read(fd, &c, 1); // each every one character from txt file
+    while (byte > 0)
+    {
+        str_buffer[i] = c;
+        i++;
+        if(c == '\n' || c == EOF)
+            break ;
+        byte = read(fd, &c, 1); // each every one character from txt file
+    }
+    // no more char OR error happens
+    if (i == 0 || byte < 0)
+    {
+        free(str_buffer);
+        return (NULL);
+    }
+    str_buffer[i] = '\0';
+    return (str_buffer);
 }
 */
-/////////////////////////////////////////////////////////////
 
 
-/*
-void print_test_result(int test_number, const char *result, const char *expected)
+
+
+
+
+int main(void)
 {
-    printf("Test %d: ", test_number);
-    
-    if (result == NULL || expected == NULL)
+    int     fd;
+    char    *str;
+    char    *path;
+    int     i;
+
+    path = "text2.txt";
+    fd = open(path, O_RDONLY);
+    i = 0;
+    while(i < 10) // number of loop (test)
     {
-        printf("FAILED (Result or Expected is NULL)\n\n");
+        str = get_next_line(fd);
+        printf("i: %i\n", i);
+        printf("fd: %i, %s\n", fd, str);
+        i++;
     }
-    else if (strcmp(result, expected) == 0)
-    {
-        printf("PASSED\n\n");
-    }
-    else
-    {
-        printf("FAILED \nResult: \"%s\" \nExpected: \"%s\"\n\n", result, expected);
-    }
+    return (0);
 }
-
-int	main(void)
-{
-	int		fd;
-	char	*line;
-
-	// Test 1: Fichier avec une seule ligne
-	fd = open("text1.txt", O_RDONLY);
-	line = get_next_line(fd);
-	print_test_result(1, line, "");
-	free(line);
-	close(fd);
-
-	// Test 2: Fichier vide
-	fd = open("text2.txt", O_RDONLY);
-	line = get_next_line(fd);
-	print_test_result(2, line, "b");
-	free(line);
-	close(fd);
-
-	// Test 3: Fichier sans caractère de nouvelle ligne
-	fd = open("text3.txt", O_RDONLY);
-	line = get_next_line(fd);
-	print_test_result(3, line, "\n");
-	free(line);
-	close(fd);
-	
-	// ... Ajoutez d'autres tests ...
-
-	return (0);
-}*/
 
