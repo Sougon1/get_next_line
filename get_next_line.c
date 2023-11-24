@@ -465,7 +465,7 @@ int main(void)
     char    *path;
     int     i;
 
-    path = "read_error.txt";
+    path = "text2.txt";
     fd = open(path, O_RDONLY);
     i = 0;
     while(i < 7) // number of loop (test)
