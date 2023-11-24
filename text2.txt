@@ -2,5 +2,5 @@ a
 b
 
 c
- d d  dd
+.d d  dd
 
